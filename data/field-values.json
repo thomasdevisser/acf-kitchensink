@@ -1,0 +1,36 @@
+{
+  "text": {
+    "normal": ["Lorem ipsum dolor sit amet consectetur adipisicing elit."],
+    "extreme": []
+  },
+  "textarea": {
+    "normal": [
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt voluptatum minus voluptates cum molestiae repudiandae, quae ex qui illo provident doloremque mollitia, quam tempora facere eum nobis doloribus excepturi neque."
+    ],
+    "extreme": []
+  },
+  "wysiwyg": {
+    "normal": [],
+    "extreme": []
+  },
+  "image": {
+    "normal": [],
+    "extreme": []
+  },
+  "link": {
+    "normal": [],
+    "extreme": []
+  },
+  "relationship": {
+    "normal": [],
+    "extreme": []
+  },
+  "gallery": {
+    "normal": [],
+    "extreme": []
+  },
+  "radio": {
+    "normal": [],
+    "extreme": []
+  }
+}
