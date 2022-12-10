@@ -8,7 +8,18 @@
 
 defined( 'ABSPATH' ) or die;
 define( 'ACFK_ROOT_DIR',  dirname( __FILE__ ) );
+define( 'ACFK_ROOT_DIR_URL', plugin_dir_url( __FILE__ ) );
 
 require 'inc/class-acfk.php';
 
-$acfk = new ACFK();
+add_action( 'init', 'start_acfk' );
+
+function start_acfk() {
+  $acfk = new ACFK();
+}
+
+add_action( 'wp_ajax_generate_kitchensink', 'generate_kitchensink' );
+function generate_kitchensink() {
+	echo "Kitchensink added";
+	wp_die(); // This is required to terminate immediately and return a proper response
+}

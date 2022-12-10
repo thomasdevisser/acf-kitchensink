@@ -2,14 +2,40 @@
 
 class ACFK {
   public function __construct() {
-    require 'class-acfk-data.php';
-    require 'class-acfk-helpers.php';
-    add_action( 'init', array( $this, 'add_settings_page' ) );
+    /**
+     * Gets all registered local layouts
+     */
+    global $blocks;
+    $blocks = $this->get_all_layouts();
+
+    /**
+     * Requires all necessary files
+     */
+    $this->bootstrap();
+
+    /**
+     * Creates the admin page
+     */
+    $this->create_admin_page();
+
+    /**
+     * Enqueue scripts
+     */
+    add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
   }
 
-  public function add_settings_page() {
+  private function bootstrap() {
+    require 'class-acfk-data.php';
+    require 'class-acfk-helpers.php';
     require 'class-acfk-admin.php';
+  }
+
+  public function create_admin_page() {
     new ACFK_Admin();
+  }
+
+  public function enqueue_scripts() {
+    wp_enqueue_script( 'acfk-ajax', ACFK_ROOT_DIR_URL . 'dist/main.js', array(), '1.0.0', true );
   }
 
   /**

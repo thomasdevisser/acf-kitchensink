@@ -1,14 +1,14 @@
 <?php
-$blocks = ACFK::get_all_layouts();
+global $blocks;
 $headers = ACFK_Helpers::filter_header_blocks( $blocks );
 $overviews = ACFK_Helpers::filter_overview_blocks( $blocks );
 ?>
 <div class="wrap">
   <h1>Generate Kitchensink</h1>
 
-  <form action="" method="post">
-    <h2 class="title">A few things you need to know</h2>
-    <p>You can only have one block with a Facet per page, so every block with "Overview" in it's label won't be added by default. If there are other blocks using Facet, exclude them by checking their checkbox in the "Choose blocks to exclude" setting. I added the option to choose your own page title, so you can generate different kitchensinks.</p>
+  <form method="post" id="generate-kitchensink-form">
+    <h2 class="title">What you need to know</h2>
+    <p>This plugin assumes your layouts are registered locally in a Flexible Content field with the key <code>field_blocks</code>. You can only add one Facet per page, so I included options to exclude blocks. This is also the reason you can only add one block with "Overview" in it's label.</p>
 
     <table class="form-table">
       <tr>
@@ -71,7 +71,10 @@ $overviews = ACFK_Helpers::filter_overview_blocks( $blocks );
       </tr>
 
       <tr>
-        <th>Choose blocks to exclude</th>
+        <th>
+          Choose blocks to exclude
+          <p class="description">If there are other blocks using Facet, exclude them here.</p>
+        </th>
         <td>
           <fieldset>
             <legend class="screen-reader-text">
@@ -94,7 +97,7 @@ $overviews = ACFK_Helpers::filter_overview_blocks( $blocks );
     </table>
 
     <p>
-      <button class="button button-primary">
+      <button type="submit" class="button button-primary">
         Generate
       </button>
     </p>

@@ -1,0 +1,26 @@
+{
+  "name": "acf-kitchensink",
+  "description": "A WordPress plugin that extends ACF, allowing testers to generate several kitchensink pages that automatically adds layouts and populates their fields with different kinds of values.",
+  "version": "1.0.0",
+  "main": "webpack.config.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "npx webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thomasdevisser/acf-kitchensink.git"
+  },
+  "keywords": [],
+  "author": "Tom de Visser",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thomasdevisser/acf-kitchensink/issues"
+  },
+  "homepage": "https://github.com/thomasdevisser/acf-kitchensink#readme",
+  "dependencies": {
+    "axios": "^1.2.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  }
+}
