@@ -17,9 +17,3 @@ add_action( 'init', 'start_acfk' );
 function start_acfk() {
   $acfk = new ACFK();
 }
-
-add_action( 'wp_ajax_generate_kitchensink', 'generate_kitchensink' );
-function generate_kitchensink() {
-	echo "Kitchensink added";
-	wp_die(); // This is required to terminate immediately and return a proper response
-}

@@ -2,21 +2,39 @@ import axios from "axios";
 
 const kitchensinkForm = document.getElementById("generate-kitchensink-form");
 
-kitchensinkForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+if (kitchensinkForm) {
+  kitchensinkForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const data = {
-    action: "generate_kitchensink",
-  };
+    const pageTitle = document.getElementById("page-title").value;
+    const variation = document.getElementById("variation").value;
+    const header = document.getElementById("header").value;
+    const overview = document.getElementById("overview").value;
+    const excluded = document.querySelectorAll(".excluded-blocks input[type=checkbox]:checked");
+    let excludedBlocks = [];
 
-  try {
-    const response = await axios(ajaxurl, {
-      method: "post",
-      data: data,
-      headers: { "content-type": "application/x-www-form-urlencoded" },
+    excluded.forEach((checkbox) => {
+      excludedBlocks.push(checkbox.value);
     });
-    console.log(response.data);
-  } catch (error) {
-    console.error(error);
-  }
-});
+
+    const kitchensinkOptions = { pageTitle, variation, header, overview, excludedBlocks };
+
+    const data = {
+      action: "generate_kitchensink",
+      kitchensinkOptions,
+    };
+
+    try {
+      const response = await axios(ajaxurl, {
+        method: "post",
+        data: data,
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+        },
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}

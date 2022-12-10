@@ -22,18 +22,33 @@ class ACFK {
      * Enqueue scripts
      */
     add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+  
+    /**
+     * Generates the kitchensink when form gets submitted
+     */
+    add_action( 'wp_ajax_generate_kitchensink', array( $this, 'generate_kitchensink' ) );
   }
 
+  /**
+   * Requires all necessary classes
+   */
   private function bootstrap() {
     require 'class-acfk-data.php';
     require 'class-acfk-helpers.php';
     require 'class-acfk-admin.php';
+    require 'class-acfk-importer.php';
   }
 
+  /**
+   * Creates the Admin page
+   */
   public function create_admin_page() {
     new ACFK_Admin();
   }
 
+  /**
+   * Enqueues all scripts
+   */
   public function enqueue_scripts() {
     wp_enqueue_script( 'acfk-ajax', ACFK_ROOT_DIR_URL . 'dist/main.js', array(), '1.0.0', true );
   }
@@ -81,5 +96,54 @@ class ACFK {
     }
 
     return $blocks;
+  }
+
+  public function generate_kitchensink() {
+    $options = $_POST['kitchensinkOptions'];
+
+    /**
+     * If no data was submitted, returns
+     */
+    if ( ! $options ) {
+      echo "No options provided";
+      wp_die();
+    }
+
+    /**
+     * Extracts all post data
+     */
+    $page_title = $options['pageTitle'] ?? 'Kitchensink';
+    $variation = $options['variation'] ?? 'normal';
+    $header = $options['header'] ?? 'header';
+    $overview = $options['overview'] ?? 'none';
+    $excluded_blocks = $options['excludedBlocks'] ?? array();
+
+    /**
+     * Creates the page
+     */
+    $post_data = array(
+      'post_title' => $page_title,
+      'post_type' => 'page',
+      'post_status' => 'publish',
+    );
+
+    $kitchensink_id = wp_insert_post( $post_data );
+
+    /**
+     * Adds the blocks on the page
+     */
+    $blocks_on_page = ACFK_Helpers::filter_blocks_for_page( $header, $overview, $excluded_blocks );
+    ACFK_Importer::add_blocks_to_page( $kitchensink_id, $blocks_on_page );
+
+    /**
+     * Fills the block fields with data
+     */
+
+    /**
+     * Sends a response to the admin page
+     */
+    echo "Kitchensink {$page_title} added.";
+    
+    wp_die(); // This is required to terminate immediately and return a proper response
   }
 }

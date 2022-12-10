@@ -76,7 +76,7 @@ $overviews = ACFK_Helpers::filter_overview_blocks( $blocks );
           <p class="description">If there are other blocks using Facet, exclude them here.</p>
         </th>
         <td>
-          <fieldset>
+          <fieldset class="excluded-blocks">
             <legend class="screen-reader-text">
               <span>Blocks to exclude</span>
             </legend>
@@ -84,7 +84,7 @@ $overviews = ACFK_Helpers::filter_overview_blocks( $blocks );
             foreach ( $blocks as $block ) {
               ?>
               <label for="exclude-<?php echo $block['name']; ?>">
-                <input type="checkbox" name="exclude-<?php echo $block['name']; ?>" id="exclude-<?php echo $block['name']; ?>">
+                <input type="checkbox" value="<?php echo $block['name']; ?>" id="exclude-<?php echo $block['name']; ?>">
                 <?php echo $block['label'];  ?>
               </label>
               <br />
