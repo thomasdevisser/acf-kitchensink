@@ -19,5 +19,3 @@ class ACFK_Admin {
     require ACFK_ROOT_DIR . '/templates/generate-kitchensink-form.php';
   }
 }
-
-new ACFK_Admin();

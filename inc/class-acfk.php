@@ -3,13 +3,19 @@
 class ACFK {
   public function __construct() {
     require 'class-acfk-data.php';
+    require 'class-acfk-helpers.php';
+    add_action( 'init', array( $this, 'add_settings_page' ) );
+  }
+
+  public function add_settings_page() {
     require 'class-acfk-admin.php';
+    new ACFK_Admin();
   }
 
   /**
    * Retrieves all layouts registered to a field name.
    */
-  public function get_all_layouts( string $field_name = 'field_blocks' ) : array {
+  static public function get_all_layouts( string $field_name = 'field_blocks' ) : array {
     /**
      * Gets all the layouts and the layout fields from ACF's
      * local storage.
@@ -41,6 +47,7 @@ class ACFK {
        */
       $block = array(
         'name' => $layout['name'],
+        'label' => $layout['label'],
         'fields' => $fields,
       );
   

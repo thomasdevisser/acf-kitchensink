@@ -12,4 +12,3 @@ define( 'ACFK_ROOT_DIR',  dirname( __FILE__ ) );
 require 'inc/class-acfk.php';
 
 $acfk = new ACFK();
-$acfk_data = new ACFK_Data();
