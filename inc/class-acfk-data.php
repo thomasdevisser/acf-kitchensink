@@ -28,4 +28,23 @@ class ACFK_Data {
   public function get_values_for_field( string $type = 'text', string $variant = 'normal' ) : array {
     return $this->value_object?->$type?->$variant;
   }
+
+  /**
+   * Gets values for a specific field type and variant in an easy way.
+   */
+  public function get_random_value_for_field( string $type = 'text', string $variant = 'normal' ) {
+    $values = $this->value_object?->$type?->$variant;
+
+    if ( $values ) {
+      if ( 'link' === $type ) {
+        $link_object = $values[array_rand( $values )];
+        $link_array = (array) $link_object;
+        return $link_array;
+      }
+
+      return $values[array_rand( $values )];
+    }
+
+    throw new Exception( "Add a value for fields with type $type and variant $variant");
+  }
 }

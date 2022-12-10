@@ -109,35 +109,28 @@ class ACFK {
       wp_die();
     }
 
+    $page_title = ! empty( $options['pageTitle'] ) ? $options['pageTitle'] : 'Kitchensink';
+
+    /**
+     * Create the kitchensink page
+     */
+    $kitchensink_id = ACFK_Importer::create_kitchensink_page( $page_title );
+
     /**
      * Extracts all post data
      */
-    $page_title = $options['pageTitle'] ?? 'Kitchensink';
     $variation = $options['variation'] ?? 'normal';
-    $header = $options['header'] ?? 'header';
-    $overview = $options['overview'] ?? 'none';
-    $excluded_blocks = $options['excludedBlocks'] ?? array();
-
-    /**
-     * Creates the page
-     */
-    $post_data = array(
-      'post_title' => $page_title,
-      'post_type' => 'page',
-      'post_status' => 'publish',
-    );
-
-    $kitchensink_id = wp_insert_post( $post_data );
 
     /**
      * Adds the blocks on the page
      */
-    $blocks_on_page = ACFK_Helpers::filter_blocks_for_page( $header, $overview, $excluded_blocks );
+    $blocks_on_page = ACFK_Helpers::filter_blocks_for_page( $options );
     ACFK_Importer::add_blocks_to_page( $kitchensink_id, $blocks_on_page );
 
     /**
      * Fills the block fields with data
      */
+    ACFK_Importer::add_field_values_to_blocks( $kitchensink_id, $variation );
 
     /**
      * Sends a response to the admin page

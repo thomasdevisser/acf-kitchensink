@@ -17,11 +17,18 @@ class ACFK_Helpers {
     return array_filter( $blocks, 'overview_filter' );
   }
 
-  static public function filter_blocks_for_page( $selected_header, $selected_overview, $excluded_blocks = array() ) {
+  static public function filter_blocks_for_page( array $options ) {
     global $blocks;
     $blocks_on_page = array();
     $headers = ACFK_Helpers::filter_header_blocks( $blocks );
     $overviews = ACFK_Helpers::filter_overview_blocks( $blocks );
+
+    /**
+     * Extracts all post data
+     */
+    $selected_header = $options['header'] ?? 'header';
+    $selected_overview = $options['overview'] ?? 'none';
+    $excluded_blocks = $options['excludedBlocks'] ?? array();
 
     /**
      * Combine headers, overviews and excluded blocks
@@ -33,7 +40,6 @@ class ACFK_Helpers {
         $excluded[] = $header['name'];
       }
     }
-
 
     foreach ( $overviews as $overview ) {
       if ( 'none' === $selected_overview || $overview['name'] !== $selected_overview ) {
