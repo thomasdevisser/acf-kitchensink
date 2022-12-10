@@ -98,6 +98,9 @@ class ACFK {
     return $blocks;
   }
 
+  /**
+   * Handles the AJAX request when submitting the generation form
+   */
   public function generate_kitchensink() {
     $options = $_POST['kitchensinkOptions'];
 

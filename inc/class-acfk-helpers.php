@@ -1,6 +1,9 @@
 <?php
 
 class ACFK_Helpers {
+  /**
+   * Returns only blocks that have 'header' in their name
+   */
   static public function filter_header_blocks( array $blocks ) : array {
     function header_filter( $block ) {
       return str_contains( $block['name'], 'header' );
@@ -9,6 +12,9 @@ class ACFK_Helpers {
     return array_filter( $blocks, 'header_filter' );
   }
 
+  /**
+   * Returns only blocks that have 'overview' in their name
+   */
   static public function filter_overview_blocks( array $blocks ) : array {
     function overview_filter( $block ) {
       return str_contains( $block['name'], 'overview' );
@@ -17,6 +23,9 @@ class ACFK_Helpers {
     return array_filter( $blocks, 'overview_filter' );
   }
 
+  /**
+   * Returns only blocks that will be on the page
+   */
   static public function filter_blocks_for_page( array $options ) {
     global $blocks;
     $blocks_on_page = array();
