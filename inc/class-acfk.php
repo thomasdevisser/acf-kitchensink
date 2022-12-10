@@ -3,6 +3,7 @@
 class ACFK {
   public function __construct() {
     require 'class-acfk-data.php';
+    require 'class-acfk-admin.php';
   }
 
   /**
