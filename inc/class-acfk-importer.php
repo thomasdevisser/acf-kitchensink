@@ -50,14 +50,49 @@ class ACFK_Importer {
           foreach ( $block_fields as $field ) {
             $acfk_data = new ACFK_Data();
             
+            /**
+             * Message fields have no user value to fill
+             */
             if ( 'message' === $field['type'] ) {
               continue;
             }
 
             /**
-             * Get a random value for the field with the selected variation
+             * Handle the relationship field value
              */
-            $value = $acfk_data->get_random_value_for_field( $field['type'], $variation );
+            if ( 'relationship' === $field['type'] ) {
+              $amount = 3;
+              $post_types = array( 'page' );
+
+              if ( isset( $field['min'] ) && $field['min'] > 3 ) {
+                $amount = $field['min'];
+              }
+
+              if ( isset( $field['max'] ) && $field['max'] < 3 ) {
+                $amount = $field['max'];
+              }
+
+              if ( isset( $field['post_type'] ) && ! empty( $field['post_type'] ) ) {
+                $post_types = $field['post_type'];
+              }
+
+              $value = get_posts(
+                array(
+                  'numberposts' => $amount,
+                  'post_type' => $post_types,
+                  'post_status' => 'publish',
+                  'fields' => 'ids',
+                )
+              );
+            }
+
+            /**
+             * Get a random value for the field with the selected variation
+             * if the value is not set by a field specific if statement above
+             */
+            if ( ! $value || empty( $value ) ) {
+              $value = $acfk_data->get_random_value_for_field( $field['type'], $variation );
+            }
 
             $field_name = $field['name'];
             $field_key = $field['key'];
