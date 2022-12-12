@@ -2,6 +2,19 @@
 
 A WordPress plugin that extends ACF, allowing testers to generate several kitchensink pages that automatically adds layouts and populates their fields with different kinds of values.
 
+## Need to know
+
+For the min width and min height on image fields, you need to be able to query for these values. That's why you have to add the following filter before uploading media, or loop over all your media and update the post meta accordingly.
+
+```php
+add_filter('wp_generate_attachment_metadata', 'add_metac', 10, 2);
+function add_metac($meta, $id){
+  update_post_meta($id, 'height', (int) $meta['height']);
+  update_post_meta($id, 'width', (int) $meta['width']);
+  return $meta;
+}
+```
+
 ## Classes
 
 ### ACFK

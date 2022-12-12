@@ -104,6 +104,52 @@ class ACFK_Importer {
             }
 
             /**
+             * Handle the image field value
+             */
+            if ( 'image' === $field['type'] ) {
+              $value = null;
+
+              /**
+               * Set up the loop to only get jpegs and pngs
+               */
+              $args = array(
+                'post_type' => 'attachment',
+                'post_mime_type' => array( 'image/png', 'image/jpeg' ),
+                'fields' => 'ids',
+              );
+
+              /**
+               * Add a min_height and min_width filter if set, for this to work you
+               * need a filter (see README)
+               */
+              if ( isset( $field['min_height'] ) && isset( $field['min_width'] ) ) {
+                $args['meta_query'] = array(
+                  'relation' => 'AND',
+                  array(
+                    'key'     => 'height',
+                    'value'   => $field['min_height'],
+                    'type'    => 'numeric',
+                    'compare' => '>',
+                  ),
+                  array(
+                    'key'     => 'width',
+                    'value'   => $field['min_width'],
+                    'type'    => 'numeric',
+                    'compare' => '>',
+                  ),
+                );
+              }
+
+              $images = get_posts( $args );
+
+              if ( ! empty( $images ) ) {
+                $value = $images[ array_rand( $images, 1) ];
+              } else {
+                continue;
+              }
+            }
+
+            /**
              * Get a random value for the field with the selected variation
              * if the value is not set by a field specific if statement above
              */
