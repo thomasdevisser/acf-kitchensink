@@ -94,7 +94,7 @@ class ACFK_Importer {
     }
   }
 
-  static public function get_value_for_relationship_field( $field ) {
+  static public function get_value_for_relationship_field( array $field ) {
     $amount = 3;
     $post_types = array( 'page' );
 
@@ -122,7 +122,7 @@ class ACFK_Importer {
     return $value;
   }
 
-  static public function get_value_for_radio_field( $field ) {
+  static public function get_value_for_radio_field( array $field ) {
     $choices = array();
 
     if ( isset( $field['choices'] ) ) {
@@ -138,7 +138,7 @@ class ACFK_Importer {
     return $value;
   }
 
-  static public function get_value_for_image_field( $field ) {
+  static public function get_value_for_image_field( array $field ) {
     $value = null;
 
     /**
@@ -182,7 +182,7 @@ class ACFK_Importer {
     return false;
   }
 
-  static public function get_value_for_gallery_field( $field ) {
+  static public function get_value_for_gallery_field( array $field ) {
     $amount = 3;
     $value = null;
 
