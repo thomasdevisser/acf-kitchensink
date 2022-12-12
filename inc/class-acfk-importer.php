@@ -150,11 +150,71 @@ class ACFK_Importer {
             }
 
             /**
+             * Handle the gallery field value
+             */
+            if ( 'gallery' === $field['type'] ) {
+              $amount = 3;
+              $value = null;
+
+              if ( isset( $field['min'] ) && $field['min'] > 3 ) {
+                $amount = $field['min'];
+              }
+
+              if ( isset( $field['max'] ) && $field['max'] < 3 ) {
+                $amount = $field['max'];
+              }
+
+              /**
+               * Set up the loop to only get jpegs and pngs
+               */
+              $args = array(
+                'numberposts' => $amount,
+                'post_type' => 'attachment',
+                'post_mime_type' => array( 'image/png', 'image/jpeg' ),
+                'fields' => 'ids',
+              );
+
+              /**
+               * Add a min_height and min_width filter if set, for this to work you
+               * need a filter (see README)
+               */
+              if ( isset( $field['min_height'] ) && isset( $field['min_width'] ) ) {
+                $args['meta_query'] = array(
+                  'relation' => 'AND',
+                  array(
+                    'key'     => 'height',
+                    'value'   => $field['min_height'],
+                    'type'    => 'numeric',
+                    'compare' => '>',
+                  ),
+                  array(
+                    'key'     => 'width',
+                    'value'   => $field['min_width'],
+                    'type'    => 'numeric',
+                    'compare' => '>',
+                  ),
+                );
+              }
+
+              $images = get_posts( $args );
+
+              if ( ! empty( $images ) ) {
+                $value = $images;
+              } else {
+                continue;
+              }
+            }
+
+            if ( in_array( $field['type'], array( 'text', 'textarea', 'wysiwyg', 'link' ) ) ) {
+              $value = $acfk_data->get_random_value_for_field( $field['type'], $variation );
+            }
+
+            /**
              * Get a random value for the field with the selected variation
              * if the value is not set by a field specific if statement above
              */
             if ( ! $value || empty( $value ) ) {
-              $value = $acfk_data->get_random_value_for_field( $field['type'], $variation );
+              continue;
             }
 
             $field_name = $field['name'];
