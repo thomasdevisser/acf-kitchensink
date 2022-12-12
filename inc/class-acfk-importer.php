@@ -87,6 +87,23 @@ class ACFK_Importer {
             }
 
             /**
+             * Handle the radio field value
+             */
+            if ( 'radio' === $field['type'] ) {
+              $choices = array();
+
+              if ( isset( $field['choices'] ) ) {
+                foreach ( $field['choices'] as $name => $label ) {
+                  $choices[] = $name;
+                }
+              } else {
+                continue;
+              }
+
+              $value = $choices[array_rand( $choices, 1 )];
+            }
+
+            /**
              * Get a random value for the field with the selected variation
              * if the value is not set by a field specific if statement above
              */

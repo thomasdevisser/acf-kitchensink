@@ -37,12 +37,12 @@ class ACFK_Data {
 
     if ( $values ) {
       if ( 'link' === $type ) {
-        $link_object = $values[array_rand( $values )];
+        $link_object = $values[array_rand( $values, 1 )];
         $link_array = (array) $link_object;
         return $link_array;
       }
 
-      return $values[array_rand( $values )];
+      return $values[array_rand( $values, 1 )];
     }
 
     throw new Exception( "Add a value for fields with type $type and variant $variant");
