@@ -91,6 +91,15 @@ class ACFK {
         'label' => $layout['label'],
         'fields' => $fields,
       );
+
+      if ( 'columns' === $layout['name'] ) {
+        foreach ( $block['fields'] as $key => $block_field ) {
+          if ( 'repeater' === $block_field['type'] ) {
+            $sub_fields = acf_get_local_fields( $block_field['key'] );
+            $block['fields'][$key]['sub_fields'] = $sub_fields;
+          }
+        }
+      } 
   
       $blocks[] = $block;
     }

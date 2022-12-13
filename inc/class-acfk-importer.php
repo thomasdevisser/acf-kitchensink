@@ -24,6 +24,119 @@ class ACFK_Importer {
     update_post_meta( $page_id, '_blocks', $field_name );
   }
 
+  static public function populate_sub_field( $field, $page_id, $variation, $key, $sub_key, $sub_field ) {
+    $acfk_data = new ACFK_Data();
+
+    switch ( $sub_field['type'] ) {
+      case 'message':
+      case 'tab':
+        break;
+      case 'relationship':
+        $value = self::get_value_for_relationship_field( $sub_field );
+        break;
+      case 'radio':
+        $value = self::get_value_for_radio_field( $sub_field );
+        break;
+      case 'image':
+        $value = self::get_value_for_image_field( $sub_field );
+        break;
+      case 'gallery':
+        $value = self::get_value_for_gallery_field( $sub_field );
+        break;
+      case 'text':
+      case 'textarea':
+      case 'wysiwyg':
+      case 'link':
+        $value = $acfk_data->get_random_value_for_field( $sub_field['type'], $variation );
+        break;
+      default:
+        break;
+    }
+  
+    if ( ! $value || empty( $value ) ) {
+      return;
+    }
+
+    $field_name = $field['name'];
+    $field_key = $field['key'];
+    $sub_field_name = $sub_field['name'];
+    $sub_field_key = $sub_field['key'];
+    var_dump( $key );
+    var_dump( $field_name );
+    var_dump( $sub_key );
+    var_dump( $sub_field_name );
+    var_dump( $sub_field_key );
+
+    /**
+     * Update the field value
+     */
+    update_post_meta( $page_id, "blocks_{$key}_{$field_name}_{$sub_key}_{$sub_field_name}", $value );
+    update_post_meta( $page_id, "_blocks_{$key}_{$field_name}_{$sub_key}_{$sub_field_name}", $sub_field_key );
+  }
+
+  static public function populate_field( $field, $page_id, $variation, $key ) {
+    $acfk_data = new ACFK_Data();
+
+    switch ( $field['type'] ) {
+      case 'message':
+      case 'tab':
+        break;
+      case 'relationship':
+        $value = self::get_value_for_relationship_field( $field );
+        break;
+      case 'radio':
+        $value = self::get_value_for_radio_field( $field );
+        break;
+      case 'image':
+        $value = self::get_value_for_image_field( $field );
+        break;
+      case 'gallery':
+        $value = self::get_value_for_gallery_field( $field );
+        break;
+      case 'text':
+      case 'textarea':
+      case 'wysiwyg':
+      case 'link':
+        $value = $acfk_data->get_random_value_for_field( $field['type'], $variation );
+        break;
+      default:
+        break;
+    }
+
+    if ( 'repeater' === $field['type'] ) {
+      $amount = 3;
+
+      if ( isset( $field['min'] ) && $field['min'] > 3 ) {
+        $amount = $field['min'];
+      }
+  
+      if ( isset( $field['max'] ) && $field['max'] < 3 ) {
+        $amount = $field['max'];
+      }
+
+      $value = $amount;
+
+      for ( $i = 0; $i < $amount; $i++ ) {
+        foreach ( $field['sub_fields'] as $sub_key => $sub_field ) {
+          self::populate_sub_field( $field, $page_id, $variation, $key, $i, $sub_field );
+        }
+      }
+    }
+
+    if ( ! $value || empty( $value ) ) {
+      return;
+    }
+
+    $field_name = $field['name'];
+    $field_key = $field['key'];
+
+    /**
+     * Update the field value
+     */
+    update_post_meta( $page_id, "blocks_{$key}_{$field_name}", $value );
+    update_post_meta( $page_id, "_blocks_{$key}_{$field_name}", $field_key );
+  }
+
   /**
    * Adds values to all the block fields
    */
@@ -48,46 +161,7 @@ class ACFK_Importer {
            * Loop through the block's fields
            */
           foreach ( $block_fields as $field ) {
-            $acfk_data = new ACFK_Data();
-
-            switch ( $field['type'] ) {
-              case 'message':
-              case 'tab':
-                break;
-              case 'relationship':
-                $value = self::get_value_for_relationship_field( $field );
-                break;
-              case 'radio':
-                $value = self::get_value_for_radio_field( $field );
-                break;
-              case 'image':
-                $value = self::get_value_for_image_field( $field );
-                break;
-              case 'gallery':
-                $value = self::get_value_for_gallery_field( $field );
-                break;
-              case 'text':
-              case 'textarea':
-              case 'wysiwyg':
-              case 'link':
-                $value = $acfk_data->get_random_value_for_field( $field['type'], $variation );
-                break;
-              default:
-                break;
-            }
-
-            if ( ! $value || empty( $value ) ) {
-              continue;
-            }
-
-            $field_name = $field['name'];
-            $field_key = $field['key'];
-
-            /**
-             * Update the field value
-             */
-            update_post_meta( $page_id, "blocks_{$key}_{$field_name}", $value );
-            update_post_meta( $page_id, "_blocks_{$key}_{$field_name}", $field_key );
+            self::populate_field( $field, $page_id, $variation, $key );
           }
         }
       }
