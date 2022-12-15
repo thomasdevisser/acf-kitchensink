@@ -61,11 +61,6 @@ class ACFK_Importer {
     $field_key = $field['key'];
     $sub_field_name = $sub_field['name'];
     $sub_field_key = $sub_field['key'];
-    var_dump( $key );
-    var_dump( $field_name );
-    var_dump( $sub_key );
-    var_dump( $sub_field_name );
-    var_dump( $sub_field_key );
 
     /**
      * Update the field value
